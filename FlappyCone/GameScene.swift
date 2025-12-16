@@ -97,7 +97,7 @@ class GameScene: SKScene {
     func setupStartGameLabel() {
         let startLabel = SKLabelNode(text: "Tap to Start")
         startLabel.fontName = "Avenir-Black"
-        startLabel.fontSize = 50
+        startLabel.fontSize = 35
         startLabel.fontColor = .red
         startLabel.position = CGPoint(x: 0, y: 100)
         startLabel.name = "startLabel"
@@ -204,7 +204,7 @@ extension GameScene: SKPhysicsContactDelegate {
         let gameOverLabel = SKLabelNode(text: "Game Over! Tap to Reset")
         gameOverLabel.fontName = "Avenir-Black"
         gameOverLabel.fontColor = .red
-        gameOverLabel.fontSize = 50
+        gameOverLabel.fontSize = 35
         gameOverLabel.name = "gameOverLabel"
         addChild(gameOverLabel)
     }
