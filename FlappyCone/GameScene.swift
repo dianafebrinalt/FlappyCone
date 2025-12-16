@@ -52,13 +52,15 @@ class GameScene: SKScene {
     func setupBird() {
         let owlLabel = SKLabelNode(text: "🦉")
         owlLabel.fontSize = 80
+        owlLabel.position = CGPoint(x: 2, y: 2)
         owlLabel.verticalAlignmentMode = .center
         owlNode = SKSpriteNode(color: .clear, size: CGSize(width: 40, height: 40))
         owlNode?.position = CGPoint(x: -100, y: 0)
-        owlNode?.physicsBody = SKPhysicsBody(rectangleOf: owlNode?.size ?? CGSize(width: 0.0, height: 0.0))
+        owlNode?.physicsBody = SKPhysicsBody(circleOfRadius: (owlNode?.size.width ?? 40) / 2)
         owlNode?.physicsBody?.categoryBitMask = PhysicsCategory.bird
         owlNode?.physicsBody?.collisionBitMask = PhysicsCategory.obstacle | PhysicsCategory.ground
         owlNode?.physicsBody?.contactTestBitMask = PhysicsCategory.obstacle | PhysicsCategory.ground | PhysicsCategory.scoreGap
+        owlNode?.zPosition = 5
         owlNode?.physicsBody?.allowsRotation = false
         owlNode?.physicsBody?.isDynamic = false
         owlNode?.addChild(owlLabel)
@@ -70,6 +72,7 @@ class GameScene: SKScene {
         ground.position = CGPoint(x: 0, y: -size.height/2 + 10)
         ground.physicsBody = SKPhysicsBody(rectangleOf: ground.size)
         ground.physicsBody?.isDynamic = false
+        ground.zPosition = 10
         ground.physicsBody?.categoryBitMask = PhysicsCategory.ground
         addChild(ground)
     }
@@ -79,7 +82,7 @@ class GameScene: SKScene {
         scoreLabel?.fontSize = 60
         scoreLabel?.text = "0"
         scoreLabel?.position = CGPoint(x: 0, y: size.height/2 - 150)
-        scoreLabel?.zPosition = 10
+        scoreLabel?.zPosition = 100
         if let scoreLabel = scoreLabel { addChild(scoreLabel) }
     }
     
@@ -125,34 +128,23 @@ class GameScene: SKScene {
     }
     
     func spawnPipes() {
-        let pipePair = SKNode()
-        pipePair.position = CGPoint(x: size.width/2 + 50, y: 0)
-        
-        let pipeWidth: CGFloat = 40
+        let pipeWidth: CGFloat = 60
         let pipeHeight: CGFloat = 500
         let gapHeight: CGFloat = 170
         let randomY = CGFloat.random(in: -100...100)
         
-        let pipeBottomLabel = SKLabelNode(text: "▍")
-        pipeBottomLabel.fontColor = .red
-        pipeBottomLabel.fontSize = 500
-        pipeBottomLabel.verticalAlignmentMode = .center
-        
-        let pipeBottomBox = SKSpriteNode(color: .clear, size: CGSize(width: pipeWidth, height: pipeHeight))
-        pipeBottomBox.addChild(pipeBottomLabel)
+        let pipePair = SKNode()
+        pipePair.position = CGPoint(x: size.width/2 + 50, y: 0)
+        pipePair.zPosition = 1
+    
+        let pipeBottomBox = SKSpriteNode(color: .green, size: CGSize(width: pipeWidth, height: pipeHeight))
         pipeBottomBox.position = CGPoint(x: 0, y: -pipeHeight/2 - gapHeight/2 + randomY)
         pipeBottomBox.physicsBody = SKPhysicsBody(rectangleOf: pipeBottomBox.size)
         pipeBottomBox.physicsBody?.isDynamic = false
         pipeBottomBox.physicsBody?.categoryBitMask = PhysicsCategory.obstacle
         pipePair.addChild(pipeBottomBox)
         
-        let pipeAtasLabel = SKLabelNode(text: "▍")
-        pipeAtasLabel.fontColor = .red
-        pipeAtasLabel.fontSize = 500
-        pipeAtasLabel.verticalAlignmentMode = .center
-        
-        let pipeTopBox = SKSpriteNode(color: .clear, size: CGSize(width: pipeWidth, height: pipeHeight))
-        pipeTopBox.addChild(pipeAtasLabel)
+        let pipeTopBox = SKSpriteNode(color: .green, size: CGSize(width: pipeWidth, height: pipeHeight))
         pipeTopBox.position = CGPoint(x: 0, y: pipeHeight/2 + gapHeight/2 + randomY)
         pipeTopBox.physicsBody = SKPhysicsBody(rectangleOf: pipeTopBox.size)
         pipeTopBox.physicsBody?.isDynamic = false
@@ -172,7 +164,6 @@ class GameScene: SKScene {
         let removeAction = SKAction.removeFromParent()
         pipePair.run(SKAction.sequence([moveAction, removeAction]))
         
-        pipePair.zPosition = -1
         addChild(pipePair)
     }
     
